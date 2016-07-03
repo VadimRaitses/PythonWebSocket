@@ -1,0 +1,36 @@
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+
+.container {
+	width: 1600px;
+	background-color: #2e2d88;
+	color: white;
+	padding: 60px;
+	border-radius: 6px;
+}
+
+
+.container  #send {
+
+
+
+
+}
+
+.container  #receive {
+
+
+}
+.container  #receive .message{
+
+    height: 15%;
+    margin-left: 6%;
+    margin-top: 10px;
+
+}
+
