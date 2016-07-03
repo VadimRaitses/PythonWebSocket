@@ -14,12 +14,14 @@ class Client:
     address = None
     is_hand_shaken = False
     isConnected = False
+    client_connection = None
 
-    def __init__(self, address):
+    def __init__(self, address, client_connection):
         Client.id += 1
         self.address = address
         self.is_hand_shaken = True
         self.isConnected = True
+        self.client_connection = client_connection
 
 
 class MyServer:
@@ -81,7 +83,7 @@ class MyServer:
                 .replace("'", "")
             print(response)
             c.sendto(response.encode("utf-8"), client_address)
-            user = Client(client_address)
+            user = Client(client_address, c)
             self.clients_dictionary[client_address] = user
             self.interchange(c, client_address)
         else:
@@ -134,7 +136,6 @@ class MyServer:
         # always send an entire message as one frame (fin)
         b1 = 0x80
 
-        # in Python 2, strs are bytes and unicodes are strings
         if type(data) == str:
             b1 |= self.TEXT
             payload = data.encode("UTF8")
@@ -174,8 +175,14 @@ class MyServer:
         # so i decided remove this byte by using del from byte array
         a = bytearray(message, 'utf-8')
         del a[0:1]
-
-        client.send(a)
+        # for broadcast messaging to all connected clients
+        # you can use  dictionary with client objects collection and keep all connections
+        # together for broadcasting.... despite PTP tcp connection you still can broadcast
+        # via saved client connections
+        for the_key in self.clients_dictionary.keys():
+            obj = self.clients_dictionary[the_key]
+            obj.client_connection.send(a)
+        #client.send(a)
 
 server = MyServer(12345)
 server.run()
