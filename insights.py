@@ -6,6 +6,7 @@ from hashlib import sha1
 from base64 import b64encode
 import sys
 import re
+import json
 
 
 class Client:
@@ -113,31 +114,33 @@ class MyServer:
             if not data:
                 print("No data")
                 break
-            print('Data from', client_address, ':', ''.join(decoded_chars))
+            json_message = ''.join(decoded_chars)
+            print('Data from', client_address, ':', json_message)
             try:
-                self.send_message("Hello", c, data)
+                json_object = json.loads(json_message)
+                self.send_message(c, json_object['data'],)
                 #  break
             except Exception:
                 print("Something bad happened")
                 sys.exit(1)
                 lock.release()
 
-    def send_message(self, c, client, data):
+    def send_message(self, client, data):
 
         # Empty message to start with
         message = ""
-        s = "Hello"
+        # s = "Hello"
         # always send an entire message as one frame (fin)
         b1 = 0x80
 
         # in Python 2, strs are bytes and unicodes are strings
-        if type(s) == str:
+        if type(data) == str:
             b1 |= self.TEXT
-            payload = s.encode("UTF8")
+            payload = data.encode("UTF8")
 
-        elif type(s) == bytes:
+        elif type(data) == bytes:
             b1 |= self.TEXT
-            payload = s
+            payload = data
 
         # Append 'FIN' flag to the message
         message += chr(b1)
@@ -164,7 +167,7 @@ class MyServer:
             message += l
 
         # Append payload to message
-        message += s
+        message += data
         # string.encode(utf-8) method , put junk byte in the start of byte array
         # and instead proper masking bit you get wrong bit from junk byte passed by string.encode()
         # so i decided remove this byte by using del from byte array
