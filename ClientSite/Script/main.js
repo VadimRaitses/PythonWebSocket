@@ -1,5 +1,5 @@
 /**
- * Created by Developer on 7/3/2016.
+ * Created by Raitses Vadim on 7/3/2016.
  */
 (function (window, $, undefined) {
 
