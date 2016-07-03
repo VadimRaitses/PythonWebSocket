@@ -51,7 +51,7 @@ class MyServer:
 
     def run(self):
         self.server_running_status = True
-        print('Starting a Socket Server...')
+        print('Starting a Socket Server at {0}...'.format(datetime.datetime.now()))
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_host = socket.gethostname()
         self.server_ip = socket.gethostbyname(self.server_host)
@@ -128,11 +128,10 @@ class MyServer:
                 lock.release()
 
     def send_message(self, client, data):
-
+        # deserializing json object to message
         data = json.dumps(data, sort_keys=True)
         # Empty message to start with
         message = ""
-        # s = "Hello"
         # always send an entire message as one frame (fin)
         b1 = 0x80
 
@@ -148,6 +147,9 @@ class MyServer:
         message += chr(b1)
 
         # never mask frames from the server to the client
+        # always debug your code to be sure that proper bytes (your message) are going to be sent
+        # in the end
+
         b2 = 0
 
         # How long is our payload?
