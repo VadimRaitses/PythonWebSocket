@@ -4,7 +4,7 @@
 (function (window, $, undefined) {
 
 	window.APPLICATION = {
-		JSON_msg: new Object(),
+		GLOBAL_JSON_msg: new Object(),
 		// websocket object
 		GLOBAL_ws: null,
 
@@ -35,7 +35,7 @@
 					+"<div class=\"col-xs-2 \">" + received_message.name  + "</div>"
 					+"<div  class=\"col-xs-10 \">"+ received_message.data + "</div>"
 					+"</div>"
-			
+
 
 
 				$("#receive").append(html)
@@ -49,11 +49,11 @@
 
 
 
-			this.JSON_msg.name = nickname
-			this.JSON_msg.data = message
+			this.GLOBAL_JSON_msg.name = nickname
+			this.GLOBAL_JSON_msg.data = message
 
 
-		this.GLOBAL_ws.send(JSON.stringify(this.JSON_msg));
+		this.GLOBAL_ws.send(JSON.stringify(this.GLOBAL_JSON_msg));
 
 		}
 
