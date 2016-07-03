@@ -174,6 +174,7 @@ class MyServer:
         # so i decided remove this byte by using del from byte array
         a = bytearray(message, 'utf-8')
         del a[0:1]
+
         client.send(a)
 
 server = MyServer(12345)

@@ -5,9 +5,7 @@
 
 	window.APPLICATION = {
 		JSON_msg: new Object(),
-	    msg : { name:'[0]',data: '[1]' },
-
-
+		// websocket object
 		GLOBAL_ws: null,
 
 
@@ -37,7 +35,7 @@
 					+"<div class=\"col-xs-2 \">" + received_message.name  + "</div>"
 					+"<div  class=\"col-xs-10 \">"+ received_message.data + "</div>"
 					+"</div>"
-				debugger;
+			
 
 
 				$("#receive").append(html)
