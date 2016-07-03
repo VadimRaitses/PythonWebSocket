@@ -5,7 +5,7 @@
 
 	window.APPLICATION = {
 
-	    msg : { event: 'register' },
+	    msg : { data: '[]' },
 
 
 		GLOBAL_ws: null,
@@ -13,29 +13,23 @@
 
 		init: function () {
 
-			//debugger;
-			//for(i=0;i<20;i++) {
-			//	console.log("i: "+i)
-				GLOBAL_ws = new WebSocket("ws://localhost:12345")
-			//}
-			GLOBAL_ws.onopen = function () {
-			//	debugger;
+
+			this.GLOBAL_ws = new WebSocket("ws://localhost:12345")
+
+			this.GLOBAL_ws.onopen = function () {
 				console.log("Opening a connection...");
 				window.identified = false;
-				//ws.send("Here's some text that the server is urgently awaiting!");
 			};
 
-			GLOBAL_ws.onclose = function (evt) {
-			//	debugger;
-				console.log("I'm sorry. Bye!");
+			this.GLOBAL_ws.onclose = function (evt) {
+				console.log("Connection Closed");
 			};
 
-			GLOBAL_ws.onerror = function (evt) {
-				//debugger;
+			this.GLOBAL_ws.onerror = function (evt) {
 				console.log("ERR: " + evt.data);
 			};
 
-			GLOBAL_ws.onmessage = function (event) {
+			this.GLOBAL_ws.onmessage = function (event) {
 				debugger;
 				var html = "<div  class=\"col-xs-12 message\">"
 					       +"<div class=\"row\">" + event.data  + "</div></div>"
@@ -46,11 +40,10 @@
 		},
 
 		onSend: function () {
-			//debugger;
 
 		var message = 	$("#message").val();
 
-		GLOBAL_ws.send(JSON.stringify(APPLICATION.msg));
+		this.GLOBAL_ws.send(JSON.stringify(APPLICATION.msg).replace('[]',message));
 
 		}
 
