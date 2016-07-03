@@ -4,8 +4,8 @@
 (function (window, $, undefined) {
 
 	window.APPLICATION = {
-
-	    msg : { data: '[]' },
+		JSON_msg: new Object(),
+	    msg : { name:'[0]',data: '[1]' },
 
 
 		GLOBAL_ws: null,
@@ -31,8 +31,14 @@
 
 			this.GLOBAL_ws.onmessage = function (event) {
 				debugger;
-				var html = "<div  class=\"col-xs-12 message\">"
-					       +"<div class=\"row\">" + event.data  + "</div></div>"
+				var received_message =  JSON.parse(event.data);
+				var html =
+					"<div  class=\"row message\">"
+					+"<div class=\"col-xs-2 \">" + received_message.name  + "</div>"
+					+"<div  class=\"col-xs-10 \">"+ received_message.data + "</div>"
+					+"</div>"
+				debugger;
+
 
 				$("#receive").append(html)
 			};
@@ -40,10 +46,16 @@
 		},
 
 		onSend: function () {
-
+		var nickname = 	$("#client_nick_name").val();
 		var message = 	$("#message").val();
 
-		this.GLOBAL_ws.send(JSON.stringify(APPLICATION.msg).replace('[]',message));
+
+
+			this.JSON_msg.name = nickname
+			this.JSON_msg.data = message
+
+
+		this.GLOBAL_ws.send(JSON.stringify(this.JSON_msg));
 
 		}
 

@@ -118,7 +118,7 @@ class MyServer:
             print('Data from', client_address, ':', json_message)
             try:
                 json_object = json.loads(json_message)
-                self.send_message(c, json_object['data'],)
+                self.send_message(c, json_object)
                 #  break
             except Exception:
                 print("Something bad happened")
@@ -127,6 +127,7 @@ class MyServer:
 
     def send_message(self, client, data):
 
+        data = json.dumps(data, sort_keys=True)
         # Empty message to start with
         message = ""
         # s = "Hello"
