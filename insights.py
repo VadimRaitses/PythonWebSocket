@@ -1,3 +1,4 @@
+import time
 import datetime
 import socket
 import threading
@@ -51,11 +52,12 @@ class MyServer:
 
     def run(self):
         self.server_running_status = True
-        print('Starting a Socket Server at {0}...'.format(datetime.datetime.now()))
+        print('[{0}] Starting a Server  ...'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_host = socket.gethostname()
         self.server_ip = socket.gethostbyname(self.server_host)
-        print("Host name {} : {} : {}...".format(self.server_ip
+        print("[{}] Host IP : {} : NAME : {} : PORT : {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                                 ,self.server_ip
                                                  , self.server_host
                                                  , self.server_port))
         self.server_socket.bind(("", self.server_port))
