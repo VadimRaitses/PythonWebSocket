@@ -66,6 +66,7 @@ class MyServer:
             c, client_address = self.server_socket.accept()
             print('Got connection from', client_address)
             threading.Thread(target=self.do_handshake, args=(c, client_address)).start()
+        # kill all running threads
 
     def do_handshake(self, c, client_address):
         print('Do Handshake')
@@ -188,5 +189,7 @@ class MyServer:
             obj.client_connection.send(a)
         #client.send(a)
 
-server = MyServer(12345)
-server.run()
+
+print('')
+#server = MyServer(12345)
+#server.run()
