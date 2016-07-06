@@ -52,11 +52,11 @@ class MyServer:
 
     def run(self):
         self.server_running_status = True
-        print('[{0}] Starting a Server  ...'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+        print('[{}] Starting a Server  ...'.format(self.get_Server_time()))
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_host = socket.gethostname()
         self.server_ip = socket.gethostbyname(self.server_host)
-        print("[{}] Host IP : {} : NAME : {} : PORT : {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print("[{}] Host IP : {} : NAME : {} : PORT : {}".format(self.get_Server_time()
                                                  ,self.server_ip
                                                  , self.server_host
                                                  , self.server_port))
@@ -64,15 +64,16 @@ class MyServer:
         self.server_socket.listen(5)
         while self.server_running_status:
             c, client_address = self.server_socket.accept()
-            print('Got connection from', client_address)
+            print('[{}] Client connected: {}'.format(self.get_Server_time()
+                                                     ,client_address))
             threading.Thread(target=self.do_handshake, args=(c, client_address)).start()
 
     def do_handshake(self, c, client_address):
-        print('Do Handshake')
+        print('[{}] Handshake with : {}'.format(self.get_Server_time(), client_address))
         if client_address not in self.clients_dictionary:
             text = c.recv(1024)
             client_msg = text.decode("utf-8")
-            print(text)
+            # print(text)
             key = (re.search('Sec-WebSocket-Key:\s+(.*?)[\n\r]+', client_msg)
                    .groups()[0]
                    .strip())
@@ -83,7 +84,7 @@ class MyServer:
                 .format(key=response_key)\
                 .replace("b'", "")\
                 .replace("'", "")
-            print(response)
+            # print(response)
             c.sendto(response.encode("utf-8"), client_address)
             user = Client(client_address, c)
             self.clients_dictionary[client_address] = user
@@ -95,7 +96,7 @@ class MyServer:
         lock = threading.Lock()
         lock.acquire()
         while 1:
-            print("Waiting for data from", client_address)
+            print("[{}] Waiting for data from {}".format(self.get_Server_time(), client_address))
             data = c.recv(1024)
             data_length = data[1] & 127
             index_mask = 2
@@ -121,11 +122,12 @@ class MyServer:
             json_message = ''.join(decoded_chars)
             print('Data from', client_address, ':', json_message)
             try:
-                json_object = json.loads(json_message)
-                self.send_message(c, json_object)
+                if len(json_message) > 0:
+                    json_object = json.loads(json_message)
+                    self.send_message(c, json_object)
                 #  break
-            except Exception:
-                print("Something bad happened")
+            except Exception as e:
+                print("{} Something bad happened   {} \n {} \n ".format(self.get_Server_time(), e, e.strerror))
                 sys.exit(1)
                 lock.release()
 
@@ -188,5 +190,7 @@ class MyServer:
             obj.client_connection.send(a)
         #client.send(a)
 
+    def get_Server_time(self):
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 server = MyServer(12345)
 server.run()
