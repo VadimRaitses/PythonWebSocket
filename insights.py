@@ -108,10 +108,11 @@ class MyServer:
             masks = [m for m in data[index_mask: index_mask + 4]]
             index_first_data_byte = index_mask + 4
             decoded_chars = []
+            un = []
             i = index_first_data_byte
             j = 0
             while i < len(data):
-                decoded_chars.append(chr(data[i] ^ masks[j % 4]))
+                decoded_chars.append(chr((data[i] ^ masks[j % 4])))
                 i += 1
                 j += 1
             # print("Done", len(data))
@@ -120,6 +121,7 @@ class MyServer:
                 print("No data")
                 break
             json_message = ''.join(decoded_chars)
+
             print('Data from', client_address, ':', json_message)
             try:
                 if len(json_message) > 0:
@@ -127,7 +129,7 @@ class MyServer:
                     self.send_message(c, json_object)
                 #  break
             except Exception as e:
-                print("{} Something bad happened   {} \n {} \n ".format(self.get_Server_time(), e, e.strerror))
+                print("{} Something bad happened   {} \n  ".format(self.get_Server_time(), e))
                 sys.exit(1)
                 lock.release()
 
