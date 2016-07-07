@@ -38,6 +38,6 @@ class ServerUI(tk.Frame):
         self.server.server_running_status = False
 
 
-root = tk.Tk()
-app = ServerUI(master=root)
-app.mainloop()
+# root = tk.Tk()
+# app = ServerUI(master=root)
+# app.mainloop()
